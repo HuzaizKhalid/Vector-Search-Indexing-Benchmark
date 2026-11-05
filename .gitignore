@@ -1,0 +1,22 @@
+# Generated data files — download/generate locally with run_benchmark.py
+data/*.npy
+data/*.hdf5
+data/_chroma_smoke/
+data/_qdrant_smoke/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# Virtual environment
+.venv/
+
+# Results & reports (optionally commit these if you want to share results)
+results/
+reports/
+
+# IDE
+.vscode/
+.idea/

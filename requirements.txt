@@ -1,0 +1,21 @@
+# Core vector search libraries
+faiss-cpu>=1.7.4
+chromadb>=0.4.22
+qdrant-client>=1.7.0
+
+# Data / numerics
+numpy>=1.24.0
+h5py>=3.9.0
+pandas>=2.0.0
+
+# Benchmarking utilities
+psutil>=5.9.0
+pyyaml>=6.0
+tqdm>=4.65.0
+
+# Plotting
+matplotlib>=3.7.0
+
+# Sentence-transformers fallback (only needed if SIFT1M download fails)
+sentence-transformers>=2.2.2
+datasets>=2.14.0

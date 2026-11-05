@@ -1,0 +1,54 @@
+# ──────────────────────────────────────────────
+#  Vector Search Benchmark  —  master config
+#  Edit this file to change any experiment parameter.
+# ──────────────────────────────────────────────
+
+dataset:
+  # "ann_benchmarks" downloads sift-128-euclidean.hdf5 (~468 MB)
+  # "sentence_transformers" embeds AG-News text with all-MiniLM-L6-v2 (384-dim)
+  source: "sentence_transformers"    # ann_benchmarks site unreachable; use ST fallback
+  ann_benchmarks_url: "http://ann-benchmarks.com/sift-128-euclidean.hdf5"
+  local_hdf5_path: "data/sift-128-euclidean.hdf5"
+  st_model: "all-MiniLM-L6-v2"      # used only for sentence_transformers source
+  st_dataset: "fancyzhx/ag_news"     # full namespace required in datasets>=5.x
+  n_train: 100000      # vectors added to each index
+  n_queries: 1000      # probe queries used to measure recall/latency
+  dimension: null      # set automatically after loading
+
+benchmark:
+  k: 10                # recall@k
+  n_timing_runs: 3     # repeat query timing this many times; use median
+  warmup_runs: 1       # discard this many runs before timing
+  output_csv: "results/benchmark_results.csv"
+
+faiss:
+  flat: {}             # no tunable params; used as ground-truth oracle too
+
+  hnsw:
+    ef_construction: 200          # fixed; affects build quality
+    M_values: [16, 32, 64]        # connections per node — sweep
+    ef_search_values: [32, 64, 128, 256]   # search beam — sweep
+
+  ivf_flat:
+    nlist_values: [128, 256, 512]           # Voronoi cells — sweep
+    nprobe_values: [8, 16, 32, 64, 128]    # cells to visit — sweep
+
+  ivf_pq:
+    nlist: 256
+    nprobe_values: [8, 32, 64]
+    # M_pq (sub-quantizers) is auto-computed as dim // 8
+    nbits: 8                               # bits per sub-quantizer code
+
+chroma:
+  # ChromaDB exposes HNSW params via collection metadata
+  M_values: [16, 32]
+  ef_construction_values: [100, 200]
+  ef_search_values: [64, 128, 256]
+  storage_path: "data/chroma_store"
+
+qdrant:
+  # Qdrant local/embedded mode (no server, no Docker)
+  M_values: [16, 32]
+  ef_construct_values: [100, 200]
+  ef_search_values: [64, 128, 256]
+  storage_path: "data/qdrant_store"
